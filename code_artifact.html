@@ -1,0 +1,2095 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แบบทดสอบวัฒนธรรมภาคกลาง</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Prompt & Sarabun -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            thaiCream: '#FAF6F0',
+            thaiGoldBorder: '#E5D5B7',
+            thaiGold: '#D97706',
+            thaiGoldDark: '#B45309',
+            thaiIndigo: '#1E293B',
+            thaiEmerald: '#059669',
+            thaiRose: '#DC2626',
+          },
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif'],
+            sarabun: ['Sarabun', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF6F0;
+      color: #1E293B;
+      font-family: 'Sarabun', sans-serif;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(217, 119, 6, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(180, 83, 9, 0.06) 0%, transparent 45%);
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Prompt', sans-serif;
+    }
+
+    .thai-card {
+      background: #FFFFFF;
+      border: 1.5px solid #E5D5B7;
+      box-shadow: 0 10px 28px -8px rgba(146, 64, 14, 0.08), 0 4px 10px -4px rgba(30, 41, 59, 0.04);
+    }
+
+    .option-btn {
+      transition: all 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .option-btn:not(:disabled):hover {
+      border-color: #D97706;
+      background-color: #FFFBEB;
+      transform: translateY(-1px);
+    }
+
+    .option-btn:not(:disabled):active {
+      transform: scale(0.99);
+    }
+
+    @keyframes pulseUrgent {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .timer-urgent {
+      animation: pulseUrgent 0.85s infinite ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+
+    @keyframes shimmerSweep {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .photo-shimmer {
+      background: linear-gradient(90deg, #F5EFE6 25%, #EDE2D0 50%, #F5EFE6 75%);
+      background-size: 200% 100%;
+      animation: shimmerSweep 1.6s infinite linear;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-slate-900">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900 text-white border-b-4 border-amber-500 shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3 text-center sm:text-left">
+        <div class="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-300/40 flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 48 48" class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M24 4L30 14L42 14L35 24L42 34L30 34L24 44L18 34L6 34L13 24L6 14L18 14L24 4Z" fill="rgba(252,211,77,0.18)" />
+            <circle cx="24" cy="24" r="6" fill="currentColor" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-wide text-amber-50">
+            แบบทดสอบวัฒนธรรมภาคกลาง
+          </h1>
+          <p class="text-xs sm:text-sm text-amber-200/90">
+            มรดกภูมิปัญญาและประเพณีอันงดงามแห่งลุ่มแม่น้ำเจ้าพระยา (ระบบคะแนนเรียลไทม์)
+          </p>
+        </div>
+      </div>
+
+      <!-- ปุ่มคู่มือแชร์ & สถานะฐานข้อมูล -->
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          onclick="openShareDeployModal()"
+          class="font-heading px-3 py-1.5 rounded-xl bg-amber-600/60 hover:bg-amber-600 text-white text-xs font-semibold border border-amber-400/40 transition-colors shadow-sm flex items-center gap-1.5"
+        >
+          <span>🔗 วิธีแชร์เป็นเว็บจริง</span>
+        </button>
+
+        <div id="dbStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-amber-950/60 border border-amber-400/30 text-amber-200">
+          <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="dbStatusText">กำลังเตรียมระบบเรียลไทม์...</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+
+    <!-- ==================== 1. หน้าแรก / ลงทะเบียน / ดูอันดับ ==================== -->
+    <section id="homeScreen" class="space-y-6 animate-fade-in">
+      <div class="grid grid-cols-3 gap-2 p-1.5 bg-amber-900/10 rounded-2xl border border-[#E5D5B7]">
+        <button type="button" id="tabRegisterBtn" onclick="switchHomeTab('register')"
+          class="font-heading py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white text-amber-900 shadow-sm border border-[#E5D5B7]">
+          📝 ทำแบบทดสอบ
+        </button>
+        <button type="button" id="tabLeaderboardBtn" onclick="switchHomeTab('leaderboard')"
+          class="font-heading py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-700 hover:bg-white/60">
+          🏆 ลีดเดอร์บอร์ด
+        </button>
+        <button type="button" id="tabNumberListBtn" onclick="switchHomeTab('numberList')"
+          class="font-heading py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-700 hover:bg-white/60">
+          📋 เช็คคะแนนเรียงเลขที่
+        </button>
+      </div>
+
+      <!-- 1.1 Panel: ลงทะเบียน -->
+      <div id="homeRegisterPanel" class="thai-card rounded-3xl p-5 sm:p-8 space-y-6">
+        <div class="border-b border-[#E5D5B7] pb-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold mb-3">
+            <span>🏛️ กติกาการทดสอบ (30 คะแนนเต็ม)</span>
+          </div>
+          <h2 class="font-heading text-xl sm:text-2xl font-bold text-slate-800">
+            ลงทะเบียนเข้าทำแบบทดสอบ
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base mt-1 leading-relaxed">
+            แบบทดสอบมี <strong class="text-amber-800">10 ข้อใหญ่</strong> โดยแต่ละข้อมีภาพถ่ายวัฒนธรรมจริงให้สังเกตและมี <strong class="text-amber-800">3 ข้อย่อย</strong> (1.ชื่อวัฒนธรรม 2.การปฏิบัติ 3.จังหวัด) รวม <strong class="text-amber-800">30 คะแนน</strong> จับเวลาข้อละ <strong class="text-rose-700">30 วินาที</strong>
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+            <div class="p-3 rounded-2xl bg-[#FAF6F0] border border-[#E5D5B7] text-xs sm:text-sm">
+              <div class="font-heading font-semibold text-amber-900 mb-0.5">⏱️ ข้อละ 30 วินาที</div>
+              <p class="text-slate-600">หากหมดเวลา ระบบจะให้คะแนนตามตัวเลือกที่คุณกดค้างไว้ทันที</p>
+            </div>
+            <div class="p-3 rounded-2xl bg-[#FAF6F0] border border-[#E5D5B7] text-xs sm:text-sm">
+              <div class="font-heading font-semibold text-amber-900 mb-0.5">💡 คำใบ้ 20% ด้านล่าง</div>
+              <p class="text-slate-600">กดเปิด/ปิดคำใบ้บริบทได้ตลอดโดยไม่ถูกตัดคะแนน</p>
+            </div>
+            <div class="p-3 rounded-2xl bg-[#FAF6F0] border border-[#E5D5B7] text-xs sm:text-sm">
+              <div class="font-heading font-semibold text-amber-900 mb-0.5">🔄 อัปเดตคะแนนล่าสุด</div>
+              <p class="text-slate-600">หากกรอกชื่อซ้ำ จะบันทึกทับเป็นคะแนนล่าสุดของชื่อนั้นทันที</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="registrationForm" class="space-y-5" novalidate>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label for="playerNameInput" class="block font-heading text-sm font-semibold text-slate-800 mb-1.5">
+                ชื่อ-นามสกุล หรือ ชื่อเล่นผู้เข้าสอบ <span class="text-rose-600">*</span>
+              </label>
+              <input
+                type="text"
+                id="playerNameInput"
+                placeholder="เช่น เด็กชายรักไทย ใจดี หรือ สมชาย"
+                autocomplete="off"
+                class="w-full px-4 py-3 rounded-2xl border-2 border-[#E5D5B7] bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 text-base transition-colors"
+              />
+            </div>
+
+            <div>
+              <label for="playerNumberInput" class="block font-heading text-sm font-semibold text-slate-800 mb-1.5">
+                เลขที่ <span class="text-rose-600">*</span>
+              </label>
+              <input
+                type="number"
+                id="playerNumberInput"
+                min="1"
+                max="9999"
+                step="1"
+                placeholder="เช่น 12"
+                class="w-full px-4 py-3 rounded-2xl border-2 border-[#E5D5B7] bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 text-base transition-colors"
+              />
+            </div>
+          </div>
+
+          <!-- แจ้งเตือนชื่อซ้ำในระบบออนไลน์ -->
+          <div id="duplicateNameAlert" class="hidden p-4 rounded-2xl bg-amber-50 border-2 border-amber-400 text-amber-950 space-y-3 animate-fade-in">
+            <p id="duplicateNameMessage" class="text-sm font-medium leading-relaxed"></p>
+            <label class="flex items-start gap-3 p-2.5 rounded-xl bg-white/80 border border-amber-300 cursor-pointer select-none">
+              <input type="checkbox" id="confirmOverwriteCheckbox" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" />
+              <span class="text-sm font-semibold text-amber-900">
+                ยืนยันการทำซ้ำเพื่อบันทึกคะแนนล่าสุดทับคะแนนเดิมของชื่อนี้
+              </span>
+            </label>
+          </div>
+
+          <div id="formValidationError" class="hidden p-3.5 rounded-2xl bg-rose-50 border border-rose-300 text-rose-700 text-sm font-medium"></div>
+
+          <button
+            type="submit"
+            id="startQuizBtn"
+            class="w-full py-3.5 px-6 rounded-2xl font-heading font-bold text-base sm:text-lg text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 disabled:opacity-45 disabled:cursor-not-allowed shadow-lg shadow-amber-700/20 transition-all flex items-center justify-center gap-2"
+          >
+            <span>เริ่มทำแบบทดสอบวัฒนธรรมภาคกลาง</span>
+            <span>➔</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- 1.2 Panel: ลีดเดอร์บอร์ด หน้าแรก -->
+      <div id="homeLeaderboardPanel" class="hidden thai-card rounded-3xl p-5 sm:p-7 space-y-4 animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5D5B7] pb-4">
+          <div>
+            <h2 class="font-heading text-xl font-bold text-slate-800 flex items-center gap-2">
+              <span>🏆 ลีดเดอร์บอร์ด (เรียงตามคะแนนสูงสุด)</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              คะแนนอัปเดตเรียลไทม์ (ยึดคะแนนล่าสุดของแต่ละชื่อ)
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="exportScoresToCSV()" class="font-heading px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors flex items-center gap-1">
+              <span>📥 ส่งออก CSV/Excel</span>
+            </button>
+            <span class="inline-flex items-center px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold">
+              ทั้งหมด <span id="homeLeaderboardCount" class="mx-1 font-bold">0</span> คน
+            </span>
+          </div>
+        </div>
+        <div id="homeLeaderboardTableWrap" class="overflow-x-auto"></div>
+      </div>
+
+      <!-- 1.3 Panel: เช็คคะแนนเรียงตามเลขที่ หน้าแรก -->
+      <div id="homeNumberListPanel" class="hidden thai-card rounded-3xl p-5 sm:p-7 space-y-4 animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5D5B7] pb-4">
+          <div>
+            <h2 class="font-heading text-xl font-bold text-slate-800">
+              📋 เช็คคะแนนเรียงตามเลขที่ (1, 2, 3...)
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              เรียงลำดับจากเลขที่น้อยไปมาก พร้อมช่องค้นหารายชื่อ
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+            <input
+              type="text"
+              id="homeNumberSearchInput"
+              oninput="renderScoreTables()"
+              placeholder="🔍 ค้นหาเลขที่ หรือ ชื่อ..."
+              class="w-full sm:w-56 px-3.5 py-2 rounded-xl border border-[#E5D5B7] bg-[#FAF6F0] text-sm focus:outline-none focus:border-amber-600"
+            />
+            <button type="button" onclick="exportScoresToCSV()" class="w-full sm:w-auto font-heading px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shrink-0">
+              📥 ส่งออก CSV
+            </button>
+          </div>
+        </div>
+        <div id="homeNumberListTableWrap" class="overflow-x-auto"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. หน้าทำแบบทดสอบ (10 ข้อใหญ่) ==================== -->
+    <section id="quizScreen" class="hidden space-y-5">
+      <!-- Sticky Top Progress Bar & 30s Timer -->
+      <div class="sticky top-2 z-30 thai-card rounded-2xl p-3.5 sm:p-4 backdrop-blur-md bg-white/95 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+          <div class="flex items-center gap-2.5">
+            <span id="quizQuestionCounter" class="font-heading px-3 py-1 rounded-xl bg-amber-800 text-white text-sm sm:text-base font-bold">
+              ข้อที่ 1 / 10
+            </span>
+            <div class="text-xs sm:text-sm text-slate-600">
+              <span class="font-semibold text-slate-800" id="quizPlayerTag">ผู้สอบ: -</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="px-3 py-1 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm font-semibold text-amber-900">
+              คะแนนสะสม: <span id="quizLiveScore" class="font-heading font-bold text-amber-700">0</span> / 30
+            </div>
+
+            <div id="timerPill" class="font-heading px-3.5 py-1 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-sm sm:text-base font-bold flex items-center gap-1.5">
+              <span>⏱️</span>
+              <span id="timerText">เหลือเวลา 30 วินาที</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+          <div id="timerProgressBar" class="h-full bg-emerald-500 transition-all duration-300 ease-linear" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <!-- ภาพถ่ายวัฒนธรรมจริงประจำข้อ -->
+      <div class="thai-card rounded-3xl p-4 sm:p-6 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="font-heading text-xs sm:text-sm font-semibold text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+            📷 สังเกตภาพถ่ายวัฒนธรรมภาคกลางด้านล่างนี้
+          </span>
+          <span class="text-xs text-slate-500">ข้อละ 3 คะแนน (ข้อย่อยละ 1 คะแนน)</span>
+        </div>
+
+        <div id="illustrationContainer" class="relative w-full aspect-[16/9] max-h-[360px] rounded-2xl overflow-hidden border-2 border-[#E5D5B7] bg-[#FAF6F0] shadow-inner">
+          <!-- Real Photo container -->
+        </div>
+      </div>
+
+      <!-- กล่องข้อย่อย 3 ข้อ -->
+      <div id="subQuestionsContainer" class="space-y-4">
+        <!-- Sub 1, 2, 3 questions rendered here -->
+      </div>
+
+      <!-- คำใบ้ 20% ด้านล่างสุด -->
+      <div class="thai-card rounded-3xl p-4 sm:p-5 border-dashed border-2 border-amber-300 bg-amber-50/40">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">💡</span>
+            <div>
+              <h3 class="font-heading text-sm sm:text-base font-semibold text-amber-950">
+                ตัวช่วยคำใบ้ (ช่วยใบ้ 20%)
+              </h3>
+              <p class="text-xs text-slate-600">กดเปิด/ปิดคำใบ้บริบทได้ตามต้องการ โดยไม่ถูกหักคะแนน</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="toggleHintBtn"
+            onclick="toggleHint()"
+            class="font-heading shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 shadow-sm transition-colors"
+          >
+            💡 เปิดดูคำใบ้ (ช่วยใบ้ 20%)
+          </button>
+        </div>
+
+        <div id="hintContentBox" class="hidden mt-3.5 p-3.5 rounded-2xl bg-white border border-amber-200 text-slate-800 text-sm sm:text-base leading-relaxed animate-fade-in">
+          <!-- Hint Content -->
+        </div>
+      </div>
+
+      <!-- แผงตรวจคำตอบ / ปุ่มข้อต่อไป (รักษาระดับ scroll) -->
+      <div id="bottomActionPanel" class="thai-card rounded-3xl p-4 sm:p-6 space-y-4 border-2 border-amber-300">
+        <div id="timeoutNoticeBanner" class="hidden p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-400 text-amber-950 text-sm sm:text-base font-semibold leading-relaxed">
+          ⏰ หมดเวลา 30 วินาที! ระบบตรวจคำตอบและคิดคะแนนตามตัวเลือกที่คุณกดเลือกค้างไว้เรียบร้อยแล้ว
+        </div>
+
+        <div id="questionFeedbackBanner" class="hidden p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div id="questionEarnedBadge" class="font-heading text-base sm:text-lg font-bold text-slate-900"></div>
+            <p id="questionFeedbackSubtext" class="text-xs sm:text-sm text-slate-600 mt-0.5"></p>
+          </div>
+          <div id="subScorePills" class="flex items-center gap-1.5 text-xs font-heading font-semibold"></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p id="selectionStatusHelper" class="text-xs sm:text-sm text-slate-600 text-center sm:text-left">
+            เลือกคำตอบให้ครบทั้ง 3 ข้อย่อย แล้วกดปุ่มตรวจคำตอบ
+          </p>
+
+          <button
+            type="button"
+            id="submitAnswerBtn"
+            onclick="handleManualSubmit()"
+            class="w-full sm:w-auto min-w-[230px] py-3.5 px-6 rounded-2xl font-heading font-bold text-base text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 shadow-lg shadow-amber-700/20 transition-all cursor-pointer"
+          >
+            ✅ ส่งคำตอบ / ตรวจคำตอบ
+          </button>
+
+          <button
+            type="button"
+            id="nextQuestionBtn"
+            onclick="goToNextQuestion()"
+            class="hidden w-full sm:w-auto min-w-[230px] py-3.5 px-6 rounded-2xl font-heading font-bold text-base text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg shadow-emerald-700/20 transition-all cursor-pointer"
+          >
+            ข้อต่อไป ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. หน้าสรุปผลคะแนนเรียลไทม์ ==================== -->
+    <section id="resultsScreen" class="hidden space-y-6 animate-fade-in">
+      <div class="thai-card rounded-3xl p-6 sm:p-8 text-center space-y-5 relative overflow-hidden">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs sm:text-sm font-heading font-semibold">
+          <span>🎉 บันทึกคะแนนเข้าสู่ฐานข้อมูลออนไลน์เรียบร้อยแล้ว</span>
+        </div>
+
+        <div>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
+            สรุปผลการทดสอบวัฒนธรรมภาคกลาง
+          </h2>
+          <p id="resultPlayerSummary" class="text-slate-600 text-sm sm:text-base mt-1"></p>
+        </div>
+
+        <div class="max-w-md mx-auto grid grid-cols-3 gap-3 pt-2">
+          <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300">
+            <div class="text-xs font-semibold text-amber-800">คะแนนรวม</div>
+            <div class="font-heading text-2xl sm:text-3xl font-bold text-amber-700 mt-1">
+              <span id="finalScoreValue">0</span><span class="text-base text-slate-500">/30</span>
+            </div>
+          </div>
+          <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200">
+            <div class="text-xs font-semibold text-emerald-800">คิดเป็นร้อยละ</div>
+            <div class="font-heading text-2xl sm:text-3xl font-bold text-emerald-700 mt-1">
+              <span id="finalPercentValue">0</span>%
+            </div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 border-2 border-slate-200">
+            <div class="text-xs font-semibold text-slate-600">เวลารวมที่ใช้</div>
+            <div class="font-heading text-xl sm:text-2xl font-bold text-slate-800 mt-1.5" id="finalTimeValue">
+              0 วิ
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <button
+            type="button"
+            onclick="returnToHome()"
+            class="font-heading px-6 py-3 rounded-2xl font-semibold text-sm sm:text-base bg-amber-700 hover:bg-amber-800 text-white shadow-md transition-colors"
+          >
+            🏠 กลับหน้าหลัก / ทำแบบทดสอบอีกครั้ง
+          </button>
+          <button
+            type="button"
+            onclick="toggleBreakdownPanel()"
+            id="toggleBreakdownBtn"
+            class="font-heading px-5 py-3 rounded-2xl font-semibold text-sm sm:text-base bg-white hover:bg-amber-50 text-amber-900 border-2 border-[#E5D5B7] transition-colors"
+          >
+            📊 ดูสรุปคะแนนรายข้อ (10 ข้อ)
+          </button>
+        </div>
+
+        <div id="questionBreakdownPanel" class="hidden text-left pt-4 border-t border-[#E5D5B7] space-y-2.5">
+          <h3 class="font-heading text-base font-bold text-slate-800">สรุปคะแนนรายข้อ (ข้อ 1 - 10)</h3>
+          <div id="questionBreakdownList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+        </div>
+      </div>
+
+      <!-- สรุปผลเรียลไทม์บนหน้าผลสอบ -->
+      <div class="thai-card rounded-3xl p-5 sm:p-7 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5D5B7] pb-4">
+          <div class="grid grid-cols-2 gap-2 p-1 bg-amber-900/10 rounded-xl border border-[#E5D5B7] w-full sm:w-auto">
+            <button
+              type="button"
+              id="resTabLeaderboardBtn"
+              onclick="switchResultTableTab('leaderboard')"
+              class="font-heading px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-amber-900 shadow-sm"
+            >
+              🏆 ลีดเดอร์บอร์ด
+            </button>
+            <button
+              type="button"
+              id="resTabNumberBtn"
+              onclick="switchResultTableTab('numberList')"
+              class="font-heading px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 hover:bg-white/60"
+            >
+              📋 เช็คคะแนนเรียงเลขที่
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="exportScoresToCSV()" class="font-heading px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm shrink-0">
+              📥 ส่งออก CSV/Excel
+            </button>
+
+            <div id="resultSearchBoxWrap" class="hidden w-full sm:w-56">
+              <input
+                type="text"
+                id="resultNumberSearchInput"
+                oninput="renderScoreTables()"
+                placeholder="🔍 ค้นหาเลขที่ หรือ ชื่อ..."
+                class="w-full px-3.5 py-2 rounded-xl border border-[#E5D5B7] bg-[#FAF6F0] text-sm focus:outline-none focus:border-amber-600"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div id="resultLeaderboardWrap" class="overflow-x-auto"></div>
+        <div id="resultNumberListWrap" class="hidden overflow-x-auto"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal: วิธีแชร์เว็บจริง & คัดลอกลิงก์ -->
+  <div id="shareDeployModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+    <div class="thai-card max-w-lg w-full rounded-3xl p-6 space-y-5 bg-white shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-[#E5D5B7] pb-3">
+        <h3 class="font-heading text-lg font-bold text-slate-900 flex items-center gap-2">
+          <span>🚀 วิธีนำไฟล์ไปสร้างเป็นเว็บแชร์ออนไลน์</span>
+        </h3>
+        <button type="button" onclick="closeShareDeployModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-base flex items-center justify-center">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+        <p class="font-medium text-slate-800">
+          เพื่อให้คนอื่นสามารถกดลิงก์จากมือถือเข้ามาทำแบบทดสอบและส่งคะแนนรวมกันได้ ให้เลือกนำไฟล์ <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">index.html</code> ไปอัปโหลดผ่านเว็บโฮสติ้งฟรีได้ 3 วิธีง่ายๆ ดังนี้ครับ:
+        </p>
+
+        <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 space-y-1">
+          <div class="font-heading font-bold text-amber-900">1. Netlify Drop (แนะนำ - เร็วที่สุด)</div>
+          <p>สร้างโฟลเดอร์ นำไฟล์ index.html ใส่ไว้ข้างใน แล้วลากโฟลเดอร์ไปวางที่ <a href="https://app.netlify.com/drop" target="_blank" class="text-amber-700 underline font-semibold">app.netlify.com/drop</a> จะได้ลิงก์เว็บ https:// ทันที</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 space-y-1">
+          <div class="font-heading font-bold text-amber-900">2. Tiiny.host (อัปไฟล์เดี่ยวได้เลย)</div>
+          <p>เข้าเว็บ <a href="https://tiiny.host" target="_blank" class="text-amber-700 underline font-semibold">tiiny.host</a> แล้วลากไฟล์ index.html วางในช่องอัปโหลด ตั้งชื่อลิงก์แล้วกด Launch</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 space-y-1">
+          <div class="font-heading font-bold text-amber-900">3. GitHub Pages (เปิดฟรีถาวร)</div>
+          <p>อัปโหลดไฟล์ index.html เข้าไปใน GitHub Repository แล้วเปิดใช้งาน Pages ในเมนู Settings</p>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-[#E5D5B7] flex flex-col sm:flex-row items-center gap-2">
+        <button type="button" onclick="copyCurrentPageUrl()" class="w-full sm:w-auto flex-1 py-2.5 px-4 rounded-xl font-heading font-semibold text-xs sm:text-sm bg-amber-700 hover:bg-amber-800 text-white shadow-sm transition-colors text-center">
+          📋 คัดลอกลิงก์หน้านี้
+        </button>
+        <button type="button" onclick="closeShareDeployModal()" class="w-full sm:w-auto py-2.5 px-5 rounded-xl font-heading font-semibold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+          ปิดหน้าต่าง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="max-w-4xl mx-auto px-4 py-6 text-center text-xs text-slate-500">
+    แบบทดสอบวัฒนธรรมภาคกลาง • สืบสานมรดกภูมิปัญญาและประเพณีไทยลุ่มแม่น้ำเจ้าพระยา (ระบบคะแนนเรียลไทม์)
+  </footer>
+
+  <!-- Firebase & Core Script Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // 1. ข้อมูลแบบทดสอบวัฒนธรรมภาคกลาง 10 ข้อใหญ่ (30 ข้อย่อย)
+    // =========================================================================
+    const QUIZ_DATA = [
+      {
+        id: 1,
+        title: "ประเพณีรับบัว (โยนบัว)",
+        wikimediaFile: "Rap_Bua.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, daytime traditional festival along a canal in Samut Prakan, Thai villagers standing on wooden canal banks joyfully tossing pink lotus flowers into an ornate gilded traditional wooden boat carrying a golden Buddha image, natural daylight, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีรับบัว (โยนบัว)",
+          choices: [
+            "ประเพณีรับบัว (โยนบัว)",
+            "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+            "ประเพณีแข่งเรือยาว",
+            "ประเพณีลอยกระทงสาย"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "โยนดอกบัวลงในเรือที่อัญเชิญหลวงพ่อโตล่องมาตามคลอง",
+          choices: [
+            "โยนดอกบัวลงในเรือที่อัญเชิญหลวงพ่อโตล่องมาตามคลอง",
+            "พายเรือแข่งความเร็วชิงธงกลางลำน้ำ",
+            "ลอยกระทงใบตองเพื่อขอขมาพระแม่คงคาในเวลากลางคืน",
+            "ตักบาตรอาหารแห้งแด่พระสงฆ์ที่พายเรือบิณฑบาตยามเช้า"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "สมุทรปราการ",
+          choices: ["สมุทรปราการ", "สมุทรสาคร", "นนทบุรี", "ปทุมธานี"]
+        },
+        hint: "เป็นประเพณีทางน้ำในเขตปริมณฑลริมแม่น้ำเจ้าพระยาตอนล่าง ผู้คนสองฝั่งคลองจะถือดอกไม้ประจำพุทธศาสนาสีชมพูรอรับขบวนเรือ"
+      },
+      {
+        id: 2,
+        title: "ประเพณีตักบาตรดอกไม้ (ตักบาตรดอกเข้าพรรษา)",
+        wikimediaFile: "Tak_Bat_Dok_Mai.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, Buddhist merit-making ceremony at Wat Phra Phutthabat in Saraburi, Thai devotees in white traditional attire offering yellow and white Dok Khao Phansa flowers to saffron-robed Buddhist monks walking up temple stairs, natural daylight, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีตักบาตรดอกไม้ (ตักบาตรดอกเข้าพรรษา)",
+          choices: [
+            "ประเพณีตักบาตรดอกไม้ (ตักบาตรดอกเข้าพรรษา)",
+            "ประเพณีตักบาตรเทโวโรหณะ",
+            "ประเพณีแห่เทียนพรรษา",
+            "ประเพณีตักบาตรน้ำผึ้ง"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "ถวายดอกเข้าพรรษาสีเหลืองและขาวแด่พระภิกษุสงฆ์ที่เดินขึ้นบันไดมณฑป",
+          choices: [
+            "ถวายดอกเข้าพรรษาสีเหลืองและขาวแด่พระภิกษุสงฆ์ที่เดินขึ้นบันไดมณฑป",
+            "ตักบาตรข้าวต้มลูกโยนแด่พระสงฆ์ที่เดินลงมาจากบันไดยอดเขา",
+            "ตักบาตรข้าวสุกและอาหารคาวหวานแด่พระสงฆ์ที่พายเรือบิณฑบาต",
+            "ถวายน้ำผึ้งและน้ำตาลทรายใส่บาตรพระภิกษุสงฆ์ในวันเพ็ญ"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "สระบุรี",
+          choices: ["สระบุรี", "ลพบุรี", "พระนครศรีอยุธยา", "อุทัยธานี"]
+        },
+        hint: "จัดขึ้นในช่วงวันเข้าพรรษา ณ วัดสำคัญบนไหล่เขาที่มีรอยพระพุทธบาทประดิษฐานอยู่ ผู้ร่วมงานจะถือช่อดอกไม้ป่าหายากที่บานปีละครั้ง"
+      },
+      {
+        id: 3,
+        title: "การแสดงหนังใหญ่ วัดขนอน",
+        wikimediaFile: "Nang_yai.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, traditional Nang Yai grand shadow play performance at Wat Khanon in Ratchaburi, performers dancing and holding large intricately perforated cowhide shadow puppets in front of a glowing white backlit screen at dusk, authentic cultural heritage, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "การแสดงหนังใหญ่ วัดขนอน",
+          choices: [
+            "การแสดงหนังใหญ่ วัดขนอน",
+            "การแสดงหุ่นละครเล็ก",
+            "การแสดงหนังตะลุง",
+            "การแสดงโขนรามเกียรติ์"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "เชิดแผ่นหนังวัวฉลุลวดลายขนาดใหญ่หน้าจอผ้าขาวประกอบการพากย์และวงปี่พาทย์",
+          choices: [
+            "เชิดแผ่นหนังวัวฉลุลวดลายขนาดใหญ่หน้าจอผ้าขาวประกอบการพากย์และวงปี่พาทย์",
+            "เชิดหุ่นกระบอกตัวเล็กโดยใช้ผู้เชิดสามคนต่อหุ่นหนึ่งตัวบนเวที",
+            "สวมหัวโขนร่ายรำตามจังหวะเพลงหน้าพาทย์เรื่องรามเกียรติ์",
+            "ร้องเพลงพื้นบ้านโต้ตอบระหว่างฝ่ายชายและฝ่ายหญิงกลางลานวัด"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "ราชบุรี",
+          choices: ["ราชบุรี", "เพชรบุรี", "นครปฐม", "กาญจนบุรี"]
+        },
+        hint: "เป็นมหรสพชั้นสูงที่ใช้แผ่นหนังโคแกะสลักอย่างวิจิตร สืบทอดและอนุรักษ์ไว้ที่วัดเก่าแก่ริมแม่น้ำแม่กลองในอำเภอโพธาราม"
+      },
+      {
+        id: 4,
+        title: "การแสดงโขน (นาฏศิลป์ราชสำนักภาคกลาง)",
+        wikimediaFile: "Khon_-_Ramakien.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, traditional Thai Khon masked dance drama performance of Ramakien on a grand stage in Bangkok, dancers wearing ornate gold embroidered costumes and detailed demon and monkey masks, dramatic stage lighting, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "การแสดงโขน (นาฏศิลป์ราชสำนักภาคกลาง)",
+          choices: [
+            "การแสดงโขน (นาฏศิลป์ราชสำนักภาคกลาง)",
+            "การแสดงละครชาตรี",
+            "การแสดงลิเกทรงเครื่อง",
+            "การแสดงหุ่นหลวง"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "สวมหัวโขนและเครื่องแต่งกายยืนเครื่องร่ายรำแสดงเรื่องรามเกียรติ์ตามบทพากย์และดนตรีปี่พาทย์",
+          choices: [
+            "สวมหัวโขนและเครื่องแต่งกายยืนเครื่องร่ายรำแสดงเรื่องรามเกียรติ์ตามบทพากย์และดนตรีปี่พาทย์",
+            "เชิดแผ่นหนังฉลุลายขนาดใหญ่หน้าจอผ้าขาวท่ามกลางแสงไฟ",
+            "รำวงมาตรฐานเป็นคู่รอบวงกลมตามจังหวะกลองรำมะนา",
+            "ร้องด้นกลอนสดโต้ตอบกันโดยไม่สวมหน้ากากและใช้ตะโพนประกอบจังหวะ"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "กรุงเทพมหานคร",
+          choices: ["กรุงเทพมหานคร", "พระนครศรีอยุธยา", "นนทบุรี", "สมุทรปราการ"]
+        },
+        hint: "เป็นนาฏศิลป์ชั้นสูงในราชสำนักที่ได้รับการขึ้นทะเบียนมรดกภูมิปัญญาทางวัฒนธรรมของยูเนสโก ตัวละครเอกเช่นพระราม ทศกัณฐ์ และหนุมาน"
+      },
+      {
+        id: 5,
+        title: "ประเพณีตักบาตรเทโวโรหณะ (วัดสังกัสรัตนคีรี)",
+        wikimediaFile: "Tak_Bat_Devo.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, Tak Bat Devo alms-giving festival at Wat Sangkat Rattana Khiri in Uthai Thani, hundreds of saffron-robed Buddhist monks walking down a long steep mountain staircase while Thai villagers line both sides offering Khao Tom Luk Yon wrapped sticky rice into alms bowls, morning sunlight, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีตักบาตรเทโวโรหณะ (วัดสังกัสรัตนคีรี)",
+          choices: [
+            "ประเพณีตักบาตรเทโวโรหณะ (วัดสังกัสรัตนคีรี)",
+            "ประเพณีตักบาตรดอกเข้าพรรษา",
+            "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+            "ประเพณีตักบาตรเที่ยงคืน"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "ตักบาตรข้าวต้มลูกโยนแด่พระภิกษุสงฆ์ที่เดินลงมาจากบันไดยอดเขาสะแกกรัง",
+          choices: [
+            "ตักบาตรข้าวต้มลูกโยนแด่พระภิกษุสงฆ์ที่เดินลงมาจากบันไดยอดเขาสะแกกรัง",
+            "ถวายช่อดอกเข้าพรรษาแด่พระภิกษุสงฆ์ที่เดินขึ้นบันไดมณฑป",
+            "พายเรือตักบาตรอาหารคาวหวานแด่พระสงฆ์ที่บิณฑบาตทางน้ำ",
+            "ตักบาตรขนมครกร้อนๆ แด่พระภิกษุสงฆ์บริเวณลานวัด"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "อุทัยธานี",
+          choices: ["อุทัยธานี", "สระบุรี", "นครสวรรค์", "ชัยนาท"]
+        },
+        hint: "จัดขึ้นในวันแรม 1 ค่ำ เดือน 11 จำลองเหตุการณ์พระพุทธเจ้าเสด็จลงจากสวรรค์ชั้นดาวดึงส์ พระสงฆ์จะเดินลงบันได 449 ขั้นจากยอดเขา"
+      },
+      {
+        id: 6,
+        title: "เพลงอีแซว (เพลงพื้นบ้านภาคกลาง)",
+        wikimediaFile: "Pleng_E-Saew.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, traditional Pleng E-Saew folk singing performance in Suphan Buri, male and female Thai folk singers dressed in colorful traditional central Thai attire singing lively call-and-response verses with expressive hand gestures while chorus members clap in the background, natural daylight, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "เพลงอีแซว (เพลงพื้นบ้านภาคกลาง)",
+          choices: [
+            "เพลงอีแซว (เพลงพื้นบ้านภาคกลาง)",
+            "การละเล่นเต้นกำรำเคียว",
+            "เพลงลำตัดหวังเต๊ะ",
+            "เพลงฉ่อยพื้นบ้าน"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "ร้องเพลงพื้นบ้านด้นกลอนสดโต้ตอบเกี้ยวพาราสีระหว่างพ่อเพลงและแม่เพลงพร้อมลูกคู่ปรบมือให้จังหวะ",
+          choices: [
+            "ร้องเพลงพื้นบ้านด้นกลอนสดโต้ตอบเกี้ยวพาราสีระหว่างพ่อเพลงและแม่เพลงพร้อมลูกคู่ปรบมือให้จังหวะ",
+            "ถือเคียวและรวงข้าวร่ายรำกลางทุ่งนาหลังฤดูเก็บเกี่ยว",
+            "ตีกลองรำมะนาประกอบการขับร้องลำตัดสลับชายหญิง",
+            "เชิดหุ่นกระบอกเล่าเรื่องนิทานพื้นบ้านหลังฉากผ้า"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "สุพรรณบุรี",
+          choices: ["สุพรรณบุรี", "พระนครศรีอยุธยา", "อ่างทอง", "สิงห์บุรี"]
+        },
+        hint: "เป็นเพลงปฏิพากย์พื้นบ้านที่มีชื่อเสียงโด่งดังในจังหวัดเมืองขุนแผน และเป็นต้นกำเนิดของศิลปินเพลงพื้นบ้านระดับตำนานอย่างแม่ขวัญจิต ศรีประจันต์"
+      },
+      {
+        id: 7,
+        title: "ประเพณีกำฟ้า (ชาวไทยพวน)",
+        wikimediaFile: "Kam_Fa_Festival.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, Kam Fa traditional festival of the Thai Phuan community in Ban Mi Lopburi, villagers dressed in traditional woven indigo phasin skirts carrying bamboo sticky rice Khao Lam and grilled sticky rice Khao Chi to offer merit at a local temple courtyard under clear morning sky, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีกำฟ้า (ชาวไทยพวน)",
+          choices: [
+            "ประเพณีกำฟ้า (ชาวไทยพวน)",
+            "ประเพณีบุญบั้งไฟ",
+            "ประเพณีแห่นางแมว",
+            "ประเพณีกวนข้าวทิพย์"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "หยุดทำงานและทำข้าวหลามข้าวจี่ทำบุญตักบาตรเพื่อบูชาและขอพรจากเทพยดาแห่งท้องฟ้า",
+          choices: [
+            "หยุดทำงานและทำข้าวหลามข้าวจี่ทำบุญตักบาตรเพื่อบูชาและขอพรจากเทพยดาแห่งท้องฟ้า",
+            "จุดบั้งไฟขึ้นสู่ท้องฟ้าเพื่อขอให้พญาแถนประทานฝนตามฤดูกาล",
+            "แห่นางแมวในกระบุงไปตามหมู่บ้านเพื่อขอฝนในยามแห้งแล้ง",
+            "ก่อเจดีย์ทรายและสรงน้ำพระพุทธรูปกลางลานวัดในวันสงกรานต์"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "ลพบุรี",
+          choices: ["ลพบุรี", "สระบุรี", "สิงห์บุรี", "อุทัยธานี"]
+        },
+        hint: "เป็นประเพณีสำคัญของชาวไทยพวนในอำเภอบ้านหมี่ ที่ถือเอาวันเสียงฟ้าร้องครั้งแรกในเดือนสามเป็นวันมงคลแห่งการเคารพฟ้า"
+      },
+      {
+        id: 8,
+        title: "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+        wikimediaFile: "Tak_Bat_Phra_Roi.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, Tak Bat Phra Roi traditional boat alms-giving ceremony along the Chao Phraya River in Pathum Thani, a long procession of wooden boats carrying saffron-robed Buddhist monks receiving food offerings from devotees seated along riverside piers and wooden boats at dawn, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+          choices: [
+            "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+            "ประเพณีรับบัว (โยนบัว)",
+            "ประเพณีตักบาตรดอกไม้",
+            "ประเพณีตักบาตรเทโวโรหณะ"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "พายเรือและนั่งริมฝั่งตักบาตรอาหารคาวหวานแด่พระสงฆ์นับร้อยรูปที่บิณฑบาตทางเรือ",
+          choices: [
+            "พายเรือและนั่งริมฝั่งตักบาตรอาหารคาวหวานแด่พระสงฆ์นับร้อยรูปที่บิณฑบาตทางเรือ",
+            "โยนดอกบัวลงในเรือขบวนแห่หลวงพ่อโตที่ล่องผ่านลำคลอง",
+            "แข่งพายเรือยาวชิงถ้วยพระราชทานกลางแม่น้ำเจ้าพระยา",
+            "ลอยกระทงสายกะลามะพร้าวเรียงรายไปตามกระแสน้ำยามค่ำคืน"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "ปทุมธานี",
+          choices: ["ปทุมธานี", "พระนครศรีอยุธยา", "สมุทรสงคราม", "นนทบุรี"]
+        },
+        hint: "เป็นวิถีบุญริมแม่น้ำเจ้าพระยาของชุมชนชาวไทยเชื้อสายมอญทางตอนเหนือของกรุงเทพฯ จัดขึ้นในช่วงเทศกาลออกพรรษา"
+      },
+      {
+        id: 9,
+        title: "ประเพณีแข่งเรือยาว",
+        wikimediaFile: "Long_boat_racing_Thailand.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, traditional Thai long boat racing on the river in Ayutthaya, two sleek wooden long boats with colorful silk ribbons on the prows and dozens of synchronized rowers paddling furiously side by side splashing water, cheering crowds on riverbanks, natural daylight, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีแข่งเรือยาว",
+          choices: [
+            "ประเพณีแข่งเรือยาว",
+            "ประเพณีรับบัว (โยนบัว)",
+            "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+            "ประเพณีแห่เทียนพรรษาทางน้ำ"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "ฝีพายจำนวนมากร่วมแรงพายเรือไม้ขุดขนาดยาวแข่งขันความเร็วเข้าเส้นชัยกลางลำน้ำ",
+          choices: [
+            "ฝีพายจำนวนมากร่วมแรงพายเรือไม้ขุดขนาดยาวแข่งขันความเร็วเข้าเส้นชัยกลางลำน้ำ",
+            "โยนดอกบัวลงในเรือที่ประดิษฐานพระพุทธรูปล่องตามลำคลอง",
+            "ตักบาตรอาหารแห้งแด่พระภิกษุสงฆ์ที่พายเรือรับบิณฑบาตยามเช้า",
+            "ล่องเรือชมการแสดงแสงสีเสียงและพลุไฟริมโบราณสถานยามค่ำ"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "พระนครศรีอยุธยา",
+          choices: ["พระนครศรีอยุธยา", "อ่างทอง", "ชัยนาท", "ปทุมธานี"]
+        },
+        hint: "เป็นกีฬาทางน้ำพื้นบ้านที่มีมาตั้งแต่สมัยกรุงศรีอยุธยา นิยมจัดในช่วงฤดูน้ำหลากหลังออกพรรษาตามลำน้ำสายหลักของราชธานีเก่า"
+      },
+      {
+        id: 10,
+        title: "ประเพณีแห่หงส์ธงตะขาบ (สงกรานต์ชาวไทยเชื้อสายมอญ)",
+        wikimediaFile: "Mon_Songkran_flag_pole.jpg",
+        photoPrompt: "35mm documentary photojournalism in Thailand, Mon Songkran Hae Hong Thong Takhap festival in Pathum Thani, Thai-Mon villagers in traditional attire carrying a long colorful woven centipede banner flag toward a tall wooden swan-topped pole at a Buddhist temple courtyard, festive atmosphere, natural daylight, authentic cultural scene, photorealistic, no text or labels in image",
+        sub1: {
+          question: "1. วัฒนธรรมนี้ชื่ออะไร",
+          correct: "ประเพณีแห่หงส์ธงตะขาบ (สงกรานต์ชาวไทยเชื้อสายมอญ)",
+          choices: [
+            "ประเพณีแห่หงส์ธงตะขาบ (สงกรานต์ชาวไทยเชื้อสายมอญ)",
+            "ประเพณีแห่ผ้าห่มองค์พระปฐมเจดีย์",
+            "ประเพณีตักบาตรพระร้อย (ทางเรือ)",
+            "ประเพณีชักพระทางบก"
+          ]
+        },
+        sub2: {
+          question: "2. วัฒนธรรมนี้ทำอะไร",
+          correct: "แห่และเชิญธงตะขาบผ้าทอผืนยาวขึ้นสู่ยอดเสาหงส์เพื่อบูชาพระพุทธศาสนาในช่วงเทศกาลสงกรานต์",
+          choices: [
+            "แห่และเชิญธงตะขาบผ้าทอผืนยาวขึ้นสู่ยอดเสาหงส์เพื่อบูชาพระพุทธศาสนาในช่วงเทศกาลสงกรานต์",
+            "แห่ผ้าสีแดงผืนยาวเดินเวียนเทียนห่มรอบองค์พระเจดีย์ขนาดใหญ่",
+            "แห่เทียนพรรษาแกะสลักขนาดใหญ่ไปถวายยังพระอุโบสถ",
+            "แห่พุ่มผ้าป่าและต้นกฐินไปทอดถวายแด่พระภิกษุสงฆ์หลังออกพรรษา"
+          ]
+        },
+        sub3: {
+          question: "3. วัฒนธรรมนี้มาจากจังหวัดไหน",
+          correct: "ปทุมธานี",
+          choices: ["ปทุมธานี", "สมุทรสาคร", "สมุทรปราการ", "นนทบุรี"]
+        },
+        hint: "เป็นเอกลักษณ์อันโดดเด่นของชุมชนชาวไทยรามัญริมแม่น้ำเจ้าพระยาในอำเภอสามโคกและเมืองปทุมธานี สื่อถึงตำนานหงส์ทองและตะขาบ"
+      }
+    ];
+
+    // =========================================================================
+    // 2. ระบบภาพจริง + แคช IndexedDB + Gemini Photorealistic Fallback
+    // =========================================================================
+    const photoMemoryCache = new Map();
+    const photoInFlightPromises = new Map();
+    const PHOTO_DB_NAME = "CentralThaiCulturePhotosDB";
+    const PHOTO_STORE_NAME = "photos";
+    let photoDbPromise = null;
+
+    function openPhotoCacheDB() {
+      if (photoDbPromise) return photoDbPromise;
+      photoDbPromise = new Promise((resolve) => {
+        try {
+          if (!window.indexedDB) {
+            resolve(null);
+            return;
+          }
+          const req = indexedDB.open(PHOTO_DB_NAME, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(PHOTO_STORE_NAME)) {
+              db.createObjectStore(PHOTO_STORE_NAME);
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = () => resolve(null);
+        } catch {
+          resolve(null);
+        }
+      });
+      return photoDbPromise;
+    }
+
+    async function getCachedPhotoUrl(questionId) {
+      const key = `culture_real_photo_v2_${questionId}`;
+      if (photoMemoryCache.has(key)) return photoMemoryCache.get(key);
+      try {
+        const db = await openPhotoCacheDB();
+        if (db) {
+          const val = await new Promise((resolve) => {
+            const tx = db.transaction(PHOTO_STORE_NAME, "readonly");
+            const store = tx.objectStore(PHOTO_STORE_NAME);
+            const req = store.get(key);
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => resolve(null);
+          });
+          if (val) {
+            photoMemoryCache.set(key, val);
+            return val;
+          }
+        }
+      } catch {}
+      try {
+        const lsVal = localStorage.getItem(key);
+        if (lsVal) {
+          photoMemoryCache.set(key, lsVal);
+          return lsVal;
+        }
+      } catch {}
+      return null;
+    }
+
+    async function setCachedPhotoUrl(questionId, dataUrl) {
+      const key = `culture_real_photo_v2_${questionId}`;
+      photoMemoryCache.set(key, dataUrl);
+      try {
+        const db = await openPhotoCacheDB();
+        if (db) {
+          await new Promise((resolve) => {
+            const tx = db.transaction(PHOTO_STORE_NAME, "readwrite");
+            const store = tx.objectStore(PHOTO_STORE_NAME);
+            store.put(dataUrl, key);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => resolve(false);
+          });
+          return;
+        }
+      } catch {}
+      try {
+        localStorage.setItem(key, dataUrl);
+      } catch {}
+    }
+
+    function testImageUrlLoad(url, timeoutMs = 5500) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        let settled = false;
+        const timer = setTimeout(() => {
+          if (!settled) {
+            settled = true;
+            img.src = "";
+            resolve(null);
+          }
+        }, timeoutMs);
+
+        img.onload = () => {
+          if (!settled) {
+            settled = true;
+            clearTimeout(timer);
+            if (img.naturalWidth > 100 && img.naturalHeight > 80) resolve(url);
+            else resolve(null);
+          }
+        };
+
+        img.onerror = () => {
+          if (!settled) {
+            settled = true;
+            clearTimeout(timer);
+            resolve(null);
+          }
+        };
+
+        img.src = url;
+      });
+    }
+
+    async function fetchWithBackoff(url, options, maxRetries = 3) {
+      let delay = 1000;
+      for (let i = 0; i <= maxRetries; i++) {
+        try {
+          const res = await fetch(url, options);
+          if (res.ok) return res;
+          if (res.status === 429 || res.status >= 500) {
+            if (i < maxRetries) {
+              await new Promise((r) => setTimeout(r, delay));
+              delay *= 2;
+              continue;
+            }
+          }
+          return null;
+        } catch {
+          if (i < maxRetries) {
+            await new Promise((r) => setTimeout(r, delay));
+            delay *= 2;
+            continue;
+          }
+          return null;
+        }
+      }
+      return null;
+    }
+
+    async function generateDocumentaryPhotoViaGemini(promptText) {
+      const apiKey = "";
+      const primaryUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+      const payload1 = {
+        contents: [{ role: "user", parts: [{ text: promptText }] }],
+        generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: "16:9" } }
+      };
+
+      const res1 = await fetchWithBackoff(primaryUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload1)
+      });
+
+      if (res1) {
+        try {
+          const data1 = await res1.json();
+          const part1 = data1?.candidates?.[0]?.content?.parts?.find((p) => p.inlineData);
+          if (part1?.inlineData?.data) {
+            const mime = part1.inlineData.mimeType || "image/png";
+            return `data:${mime};base64,${part1.inlineData.data}`;
+          }
+        } catch {}
+      }
+
+      const secondaryUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent?key=${apiKey}`;
+      const payload2 = {
+        contents: [{ parts: [{ text: promptText }] }],
+        generationConfig: { responseModalities: ["TEXT", "IMAGE"] }
+      };
+
+      const res2 = await fetchWithBackoff(secondaryUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload2)
+      });
+
+      if (res2) {
+        try {
+          const data2 = await res2.json();
+          const part2 = data2?.candidates?.[0]?.content?.parts?.find((p) => p.inlineData);
+          if (part2?.inlineData?.data) {
+            const mime = part2.inlineData.mimeType || "image/png";
+            return `data:${mime};base64,${part2.inlineData.data}`;
+          }
+        } catch {}
+      }
+      return null;
+    }
+
+    async function resolveCulturePhoto(questionObj) {
+      const qId = questionObj.id;
+      if (photoInFlightPromises.has(qId)) return photoInFlightPromises.get(qId);
+
+      const taskPromise = (async () => {
+        const cached = await getCachedPhotoUrl(qId);
+        if (cached) return { url: cached, sourceType: cached.startsWith("data:") ? "documentary-ai" : "wikimedia" };
+
+        if (questionObj.wikimediaFile) {
+          const wikiUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(questionObj.wikimediaFile)}?width=900`;
+          const validWiki = await testImageUrlLoad(wikiUrl, 5500);
+          if (validWiki) {
+            await setCachedPhotoUrl(qId, validWiki);
+            return { url: validWiki, sourceType: "wikimedia" };
+          }
+        }
+
+        const genDataUrl = await generateDocumentaryPhotoViaGemini(questionObj.photoPrompt);
+        if (genDataUrl) {
+          await setCachedPhotoUrl(qId, genDataUrl);
+          return { url: genDataUrl, sourceType: "documentary-ai" };
+        }
+        return null;
+      })();
+
+      photoInFlightPromises.set(qId, taskPromise);
+      try {
+        return await taskPromise;
+      } finally {
+        photoInFlightPromises.delete(qId);
+      }
+    }
+
+    function preloadCulturePhoto(index) {
+      if (index >= 0 && index < QUIZ_DATA.length) {
+        resolveCulturePhoto(QUIZ_DATA[index]).catch(() => {});
+      }
+    }
+
+    async function renderCultureRealPhoto(questionIndex) {
+      const container = document.getElementById("illustrationContainer");
+      const qObj = QUIZ_DATA[questionIndex];
+      const badgeText = `ภาพถ่ายวัฒนธรรม • ข้อที่ ${questionIndex + 1}/10`;
+
+      container.innerHTML = `
+        <div class="w-full h-full photo-shimmer flex flex-col items-center justify-center p-6 text-center">
+          <div class="w-10 h-10 rounded-full border-4 border-amber-300 border-t-amber-700 animate-spin mb-3"></div>
+          <p class="font-heading text-sm sm:text-base font-semibold text-amber-950">กำลังดึงภาพถ่ายวัฒนธรรมจริง...</p>
+          <p class="text-xs text-slate-600 mt-1">โปรดสังเกตรายละเอียดในภาพเพื่อตอบคำถามทั้ง 3 ข้อย่อย</p>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-900/75 backdrop-blur-sm text-white font-heading text-xs font-medium border border-white/20">
+            ${badgeText}
+          </span>
+        </div>
+      `;
+
+      const result = await resolveCulturePhoto(qObj);
+      if (state.currentQuestionIndex !== questionIndex) return;
+
+      if (result && result.url) {
+        const imgEl = document.createElement("img");
+        imgEl.src = result.url;
+        imgEl.alt = `ภาพถ่ายวัฒนธรรมภาคกลาง ข้อที่ ${questionIndex + 1}`;
+        imgEl.className = "w-full h-full object-cover object-center animate-fade-in";
+
+        imgEl.onerror = async () => {
+          if (imgEl.dataset.fallbackTriggered === "true") return;
+          imgEl.dataset.fallbackTriggered = "true";
+          const fallbackDataUrl = await generateDocumentaryPhotoViaGemini(qObj.photoPrompt);
+          if (fallbackDataUrl && state.currentQuestionIndex === questionIndex) {
+            await setCachedPhotoUrl(qObj.id, fallbackDataUrl);
+            imgEl.src = fallbackDataUrl;
+          }
+        };
+
+        container.innerHTML = "";
+        container.appendChild(imgEl);
+
+        const badgeWrap = document.createElement("div");
+        badgeWrap.className = "absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none";
+        badgeWrap.innerHTML = `
+          <span class="px-3 py-1 rounded-full bg-slate-900/75 backdrop-blur-md text-amber-50 font-heading text-xs font-medium border border-amber-300/30 shadow-sm">
+            ${badgeText}
+          </span>
+          <span class="px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-md text-slate-800 font-heading text-[11px] font-semibold shadow-sm border border-[#E5D5B7]">
+            ${result.sourceType === "wikimedia" ? "ภาพถ่ายสารคดี" : "ภาพจำลองสารคดี"}
+          </span>
+        `;
+        container.appendChild(badgeWrap);
+      } else {
+        container.innerHTML = `
+          <div class="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#FAF6F0]">
+            <span class="text-3xl mb-2">🏛️</span>
+            <p class="font-heading text-sm font-semibold text-amber-900">ไม่พบการเชื่อมต่อภาพถ่ายในขณะนี้</p>
+            <button type="button" onclick="retryLoadCurrentPhoto()" class="mt-2 px-4 py-1.5 rounded-xl bg-amber-700 text-white font-heading text-xs font-semibold hover:bg-amber-800">
+              ลองโหลดภาพใหม่
+            </button>
+          </div>
+        `;
+      }
+
+      preloadCulturePhoto(questionIndex + 1);
+    }
+
+    window.retryLoadCurrentPhoto = function () {
+      renderCultureRealPhoto(state.currentQuestionIndex);
+    };
+
+    // =========================================================================
+    // 3. State & App Initialization
+    // =========================================================================
+    const state = {
+      db: null,
+      auth: null,
+      currentUser: null,
+      appId: typeof __app_id !== 'undefined' ? __app_id : 'central-culture-quiz-default',
+      isFirestoreConnected: false,
+
+      scoresList: [],
+
+      playerName: '',
+      normalizedPlayerName: '',
+      playerNumber: 0,
+
+      currentQuestionIndex: 0,
+      shuffledSubQuestions: [],
+      currentSelections: { sub1: null, sub2: null, sub3: null },
+      isCurrentSubmitted: false,
+      hintVisible: false,
+
+      timeLeft: 30,
+      timerInterval: null,
+      totalTimeTakenSeconds: 0,
+
+      totalScore: 0,
+      questionHistory: []
+    };
+
+    // Normalize name to be used as unique Document ID in Firestore to prevent duplicate names
+    function normalizeName(rawName) {
+      return String(rawName || '').trim().replace(/\s+/g, ' ').toLowerCase();
+    }
+
+    function createSafeDocId(normalizedStr) {
+      const encoder = new TextEncoder();
+      const bytes = encoder.encode(normalizedStr);
+      let hex = '';
+      for (const b of bytes) hex += b.toString(16).padStart(2, '0');
+      return 'user_' + hex.slice(0, 120);
+    }
+
+    function updateDbStatusUI(isOnline, label) {
+      const dot = document.getElementById('dbStatusDot');
+      const text = document.getElementById('dbStatusText');
+      if (!dot || !text) return;
+      dot.className = isOnline
+        ? 'w-2 h-2 rounded-full bg-emerald-400'
+        : 'w-2 h-2 rounded-full bg-amber-300';
+      text.textContent = label;
+    }
+
+    // =========================================================================
+    // 4. Firebase Firestore Rules Mandatory Rules Compliance
+    // =========================================================================
+    async function initDatabase() {
+      try {
+        if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+          updateDbStatusUI(true, 'โหมดทำงานในเซสชันนี้');
+          renderScoreTables();
+          return;
+        }
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        state.db = getFirestore(app);
+        state.auth = getAuth(app);
+
+        // RULE 3: Auth before queries
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          const cred = await signInWithCustomToken(state.auth, __initial_auth_token);
+          state.currentUser = cred.user;
+        } else {
+          const cred = await signInAnonymously(state.auth);
+          state.currentUser = cred.user;
+        }
+
+        if (!state.currentUser) return;
+
+        // RULE 1: Standard Public Collection Path
+        const scoresColRef = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'central_culture_quiz_scores');
+
+        // RULE 2: No complex queries, fetch collection and process in memory
+        onSnapshot(
+          scoresColRef,
+          (snapshot) => {
+            const dedupMap = new Map();
+            snapshot.forEach((docSnap) => {
+              const data = docSnap.data();
+              if (!data || !data.name) return;
+              const norm = normalizeName(data.name);
+              const existing = dedupMap.get(norm);
+              if (!existing || (data.updatedAt || 0) >= (existing.updatedAt || 0)) {
+                dedupMap.set(norm, {
+                  id: docSnap.id,
+                  name: String(data.name).trim(),
+                  normalizedName: norm,
+                  studentNumber: Number(data.studentNumber) || 0,
+                  score: Number(data.score) || 0,
+                  totalQuestions: Number(data.totalQuestions) || 30,
+                  timeTakenSeconds: Number(data.timeTakenSeconds) || 0,
+                  updatedAt: Number(data.updatedAt) || Date.now()
+                });
+              }
+            });
+
+            state.scoresList = Array.from(dedupMap.values());
+            state.isFirestoreConnected = true;
+            updateDbStatusUI(true, 'ฐานข้อมูลออนไลน์เรียลไทม์');
+            checkDuplicateNameLive();
+            renderScoreTables();
+          },
+          (err) => {
+            console.error('Firestore snapshot error:', err);
+            updateDbStatusUI(false, 'โหมดบันทึกในเซสชัน');
+          }
+        );
+      } catch (err) {
+        console.error('DB init error:', err);
+        updateDbStatusUI(false, 'โหมดบันทึกในเซสชัน');
+      }
+    }
+
+    async function saveScoreRecord(record) {
+      const norm = normalizeName(record.name);
+      const cleanRecord = {
+        name: record.name.trim().replace(/\s+/g, ' '),
+        normalizedName: norm,
+        studentNumber: Number(record.studentNumber),
+        score: Number(record.score),
+        totalQuestions: 30,
+        timeTakenSeconds: Number(record.timeTakenSeconds),
+        updatedAt: Date.now()
+      };
+
+      // Update in memory state immediately
+      const filtered = state.scoresList.filter((item) => item.normalizedName !== norm);
+      filtered.push(cleanRecord);
+      state.scoresList = filtered;
+      renderScoreTables();
+
+      // Write to Firestore using normalized document ID so it overwrites with latest score
+      if (state.db && state.currentUser) {
+        try {
+          const docId = createSafeDocId(norm);
+          const docRef = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'central_culture_quiz_scores', docId);
+          await setDoc(docRef, cleanRecord);
+        } catch (err) {
+          console.error('Error saving score to Firestore:', err);
+        }
+      }
+    }
+
+    // =========================================================================
+    // 5. Name Duplication & Overwrite Handling
+    // =========================================================================
+    const playerNameInput = document.getElementById('playerNameInput');
+    const playerNumberInput = document.getElementById('playerNumberInput');
+    const duplicateNameAlert = document.getElementById('duplicateNameAlert');
+    const duplicateNameMessage = document.getElementById('duplicateNameMessage');
+    const confirmOverwriteCheckbox = document.getElementById('confirmOverwriteCheckbox');
+    const startQuizBtn = document.getElementById('startQuizBtn');
+    const formValidationError = document.getElementById('formValidationError');
+
+    function findExistingByName(rawName) {
+      const norm = normalizeName(rawName);
+      if (!norm) return null;
+      return state.scoresList.find((item) => item.normalizedName === norm) || null;
+    }
+
+    function checkDuplicateNameLive() {
+      const existing = findExistingByName(playerNameInput.value);
+      if (existing) {
+        duplicateNameMessage.textContent = `⚠️ พบชื่อนี้ในระบบออนไลน์แล้ว (เลขที่เดิม: ${existing.studentNumber}, คะแนนเดิม: ${existing.score}/30) — ไม่อนุญาตให้มีชื่อซ้ำในระบบ หากคุณเลือกทำแบบทดสอบใหม่ ระบบจะบันทึกทับเป็น 'คะแนนล่าสุด' ของชื่อนี้ทันที`;
+        duplicateNameAlert.classList.remove('hidden');
+        startQuizBtn.disabled = !confirmOverwriteCheckbox.checked;
+      } else {
+        duplicateNameAlert.classList.add('hidden');
+        confirmOverwriteCheckbox.checked = false;
+        startQuizBtn.disabled = false;
+      }
+    }
+
+    playerNameInput.addEventListener('input', () => {
+      formValidationError.classList.add('hidden');
+      checkDuplicateNameLive();
+    });
+
+    playerNumberInput.addEventListener('input', () => {
+      formValidationError.classList.add('hidden');
+    });
+
+    confirmOverwriteCheckbox.addEventListener('change', () => {
+      const existing = findExistingByName(playerNameInput.value);
+      if (existing) {
+        startQuizBtn.disabled = !confirmOverwriteCheckbox.checked;
+      }
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rawName = playerNameInput.value.trim().replace(/\s+/g, ' ');
+      const rawNumber = playerNumberInput.value.trim();
+      const parsedNum = parseInt(rawNumber, 10);
+
+      if (!rawName) {
+        formValidationError.textContent = '⚠️ กรุณากรอกชื่อ-นามสกุล หรือ ชื่อเล่นก่อนเริ่มทำแบบทดสอบ';
+        formValidationError.classList.remove('hidden');
+        playerNameInput.focus();
+        return;
+      }
+
+      if (!rawNumber || isNaN(parsedNum) || parsedNum <= 0) {
+        formValidationError.textContent = '⚠️ กรุณากรอกเลขที่เป็นตัวเลขจำนวนเต็มบวก (เช่น 1, 2, 15)';
+        formValidationError.classList.remove('hidden');
+        playerNumberInput.focus();
+        return;
+      }
+
+      const existing = findExistingByName(rawName);
+      if (existing && !confirmOverwriteCheckbox.checked) {
+        formValidationError.textContent = '⚠️ กรุณากดติ๊กถูกยืนยันการทำซ้ำเพื่อบันทึกคะแนนล่าสุดทับคะแนนเดิม';
+        formValidationError.classList.remove('hidden');
+        return;
+      }
+
+      startQuiz(rawName, parsedNum);
+    });
+
+    // =========================================================================
+    // 6. Navigation Tabs & Modal logic
+    // =========================================================================
+    window.switchHomeTab = function (tabName) {
+      const panels = {
+        register: document.getElementById('homeRegisterPanel'),
+        leaderboard: document.getElementById('homeLeaderboardPanel'),
+        numberList: document.getElementById('homeNumberListPanel')
+      };
+      const buttons = {
+        register: document.getElementById('tabRegisterBtn'),
+        leaderboard: document.getElementById('tabLeaderboardBtn'),
+        numberList: document.getElementById('tabNumberListBtn')
+      };
+
+      Object.keys(panels).forEach((key) => {
+        if (key === tabName) {
+          panels[key].classList.remove('hidden');
+          buttons[key].className = 'font-heading py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white text-amber-900 shadow-sm border border-[#E5D5B7]';
+        } else {
+          panels[key].classList.add('hidden');
+          buttons[key].className = 'font-heading py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-700 hover:bg-white/60';
+        }
+      });
+      renderScoreTables();
+    };
+
+    window.switchResultTableTab = function (tabName) {
+      const lbWrap = document.getElementById('resultLeaderboardWrap');
+      const numWrap = document.getElementById('resultNumberListWrap');
+      const lbBtn = document.getElementById('resTabLeaderboardBtn');
+      const numBtn = document.getElementById('resTabNumberBtn');
+      const searchBox = document.getElementById('resultSearchBoxWrap');
+
+      if (tabName === 'leaderboard') {
+        lbWrap.classList.remove('hidden');
+        numWrap.classList.add('hidden');
+        searchBox.classList.add('hidden');
+        lbBtn.className = 'font-heading px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-amber-900 shadow-sm';
+        numBtn.className = 'font-heading px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 hover:bg-white/60';
+      } else {
+        lbWrap.classList.add('hidden');
+        numWrap.classList.remove('hidden');
+        searchBox.classList.remove('hidden');
+        numBtn.className = 'font-heading px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-amber-900 shadow-sm';
+        lbBtn.className = 'font-heading px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 hover:bg-white/60';
+      }
+    };
+
+    window.openShareDeployModal = function () {
+      document.getElementById('shareDeployModal').classList.remove('hidden');
+    };
+
+    window.closeShareDeployModal = function () {
+      document.getElementById('shareDeployModal').classList.add('hidden');
+    };
+
+    window.copyCurrentPageUrl = function () {
+      const url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('คัดลอกลิงก์เรียบร้อยแล้ว!');
+        }).catch(() => {
+          fallbackCopyText(url);
+        });
+      } else {
+        fallbackCopyText(url);
+      }
+    };
+
+    function fallbackCopyText(text) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      alert('คัดลอกลิงก์เรียบร้อยแล้ว!');
+    }
+
+    // =========================================================================
+    // 7. CSV / Excel Export Functionality (UTF-8 BOM support for Thai language)
+    // =========================================================================
+    window.exportScoresToCSV = function () {
+      if (!state.scoresList || state.scoresList.length === 0) {
+        alert('ยังไม่มีข้อมูลคะแนนในระบบสำหรับส่งออก');
+        return;
+      }
+
+      // Sort by student number for structured export
+      const sorted = [...state.scoresList].sort((a, b) => a.studentNumber - b.studentNumber);
+
+      let csvContent = '\uFEFF'; // UTF-8 BOM for Thai Excel
+      csvContent += 'ลำดับ,เลขที่,ชื่อ-นามสกุล,คะแนนเต็ม 30,คิดเป็นร้อยละ (%),เวลารวมที่ใช้ (วินาที),เวลาที่บันทึก\n';
+
+      sorted.forEach((item, idx) => {
+        const pct = Math.round((item.score / 30) * 100);
+        const dateStr = item.updatedAt ? new Date(item.updatedAt).toLocaleString('th-TH') : '-';
+        const cleanName = `"${item.name.replace(/"/g, '""')}"`;
+        csvContent += `${idx + 1},${item.studentNumber},${cleanName},${item.score},${pct}%,${item.timeTakenSeconds},"${dateStr}"\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `คะแนนแบบทดสอบวัฒนธรรมภาคกลาง_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    // =========================================================================
+    // 8. Quiz Gameplay, 30s Timer & Scroll Position Lock
+    // =========================================================================
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz(playerName, playerNumber) {
+      state.playerName = playerName;
+      state.normalizedPlayerName = normalizeName(playerName);
+      state.playerNumber = playerNumber;
+      state.currentQuestionIndex = 0;
+      state.totalScore = 0;
+      state.totalTimeTakenSeconds = 0;
+      state.questionHistory = [];
+
+      document.getElementById('homeScreen').classList.add('hidden');
+      document.getElementById('resultsScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.remove('hidden');
+
+      document.getElementById('quizPlayerTag').textContent = `เลขที่ ${playerNumber} • ${playerName}`;
+      loadQuestion(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function loadQuestion(index) {
+      clearInterval(state.timerInterval);
+      state.currentQuestionIndex = index;
+      state.currentSelections = { sub1: null, sub2: null, sub3: null };
+      state.isCurrentSubmitted = false;
+      state.hintVisible = false;
+      state.timeLeft = 30;
+
+      const qObj = QUIZ_DATA[index];
+
+      state.shuffledSubQuestions = [
+        { key: 'sub1', question: qObj.sub1.question, correct: qObj.sub1.correct, choices: shuffleArray(qObj.sub1.choices) },
+        { key: 'sub2', question: qObj.sub2.question, correct: qObj.sub2.correct, choices: shuffleArray(qObj.sub2.choices) },
+        { key: 'sub3', question: qObj.sub3.question, correct: qObj.sub3.correct, choices: shuffleArray(qObj.sub3.choices) }
+      ];
+
+      document.getElementById('quizQuestionCounter').textContent = `ข้อที่ ${index + 1} / 10`;
+      document.getElementById('quizLiveScore').textContent = state.totalScore;
+      updateTimerVisuals();
+
+      renderCultureRealPhoto(index);
+
+      const hintBox = document.getElementById('hintContentBox');
+      const hintBtn = document.getElementById('toggleHintBtn');
+      hintBox.classList.add('hidden');
+      hintBox.textContent = `คำใบ้: ${qObj.hint}`;
+      hintBtn.textContent = '💡 เปิดดูคำใบ้ (ช่วยใบ้ 20%)';
+
+      document.getElementById('timeoutNoticeBanner').classList.add('hidden');
+      document.getElementById('questionFeedbackBanner').classList.add('hidden');
+      document.getElementById('submitAnswerBtn').classList.remove('hidden');
+      document.getElementById('nextQuestionBtn').classList.add('hidden');
+      updateSelectionHelperText();
+
+      renderSubQuestions();
+
+      state.timerInterval = setInterval(() => {
+        state.timeLeft -= 1;
+        updateTimerVisuals();
+
+        if (state.timeLeft <= 0) {
+          clearInterval(state.timerInterval);
+          // Auto submit & grade according to currently selected choice without penalty!
+          gradeCurrentQuestion(true);
+        }
+      }, 1000);
+    }
+
+    function updateTimerVisuals() {
+      const timerText = document.getElementById('timerText');
+      const timerPill = document.getElementById('timerPill');
+      const progressBar = document.getElementById('timerProgressBar');
+
+      const safeSec = Math.max(0, state.timeLeft);
+      timerText.textContent = `เหลือเวลา ${safeSec} วินาที`;
+      const pct = (safeSec / 30) * 100;
+      progressBar.style.width = `${pct}%`;
+
+      if (safeSec > 15) {
+        timerPill.className = 'font-heading px-3.5 py-1 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-sm sm:text-base font-bold flex items-center gap-1.5';
+        progressBar.className = 'h-full bg-emerald-500 transition-all duration-300 ease-linear';
+      } else if (safeSec >= 10) {
+        timerPill.className = 'font-heading px-3.5 py-1 rounded-xl bg-amber-50 border border-amber-400 text-amber-900 text-sm sm:text-base font-bold flex items-center gap-1.5';
+        progressBar.className = 'h-full bg-amber-500 transition-all duration-300 ease-linear';
+      } else {
+        timerPill.className = 'timer-urgent font-heading px-3.5 py-1 rounded-xl bg-rose-50 border-2 border-rose-400 text-rose-700 text-sm sm:text-base font-bold flex items-center gap-1.5';
+        progressBar.className = 'h-full bg-rose-600 transition-all duration-300 ease-linear';
+      }
+    }
+
+    function renderSubQuestions() {
+      const container = document.getElementById('subQuestionsContainer');
+      const thaiLetters = ['ก', 'ข', 'ค', 'ง'];
+
+      container.innerHTML = state.shuffledSubQuestions
+        .map((sub) => {
+          const selectedIdx = state.currentSelections[sub.key];
+          const isSubmitted = state.isCurrentSubmitted;
+
+          const choicesHtml = sub.choices
+            .map((choiceText, idx) => {
+              const isSelected = selectedIdx === idx;
+              const isCorrectChoice = choiceText === sub.correct;
+
+              let btnStyle = 'border-[#E5D5B7] bg-white text-slate-800';
+              let badgeStyle = 'bg-[#FAF6F0] text-amber-900 border border-[#E5D5B7]';
+              let statusTag = '';
+
+              if (!isSubmitted) {
+                if (isSelected) {
+                  btnStyle = 'border-amber-600 bg-amber-50/90 text-amber-950 ring-2 ring-amber-500/30 font-semibold';
+                  badgeStyle = 'bg-amber-600 text-white border-amber-600';
+                }
+              } else {
+                if (isCorrectChoice) {
+                  btnStyle = 'border-emerald-600 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-500/25 font-semibold';
+                  badgeStyle = 'bg-emerald-600 text-white border-emerald-600';
+                  statusTag = isSelected
+                    ? '<span class="ml-auto shrink-0 text-xs font-heading font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white">✓ ถูกต้อง (+1)</span>'
+                    : '<span class="ml-auto shrink-0 text-xs font-heading font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">เฉลยที่ถูก</span>';
+                } else if (isSelected && !isCorrectChoice) {
+                  btnStyle = 'border-rose-600 bg-rose-50 text-rose-950 ring-2 ring-rose-500/25 font-semibold';
+                  badgeStyle = 'bg-rose-600 text-white border-rose-600';
+                  statusTag = '<span class="ml-auto shrink-0 text-xs font-heading font-bold px-2.5 py-0.5 rounded-full bg-rose-600 text-white">✕ ไม่ถูกต้อง</span>';
+                } else {
+                  btnStyle = 'border-slate-200 bg-slate-50/70 text-slate-400';
+                  badgeStyle = 'bg-slate-100 text-slate-400 border-slate-200';
+                }
+              }
+
+              return `
+                <button
+                  type="button"
+                  ${isSubmitted ? 'disabled' : ''}
+                  onclick="selectSubOption('${sub.key}', ${idx})"
+                  class="option-btn w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 flex items-center gap-3 ${btnStyle}"
+                >
+                  <span class="w-8 h-8 rounded-xl flex items-center justify-center font-heading text-sm font-bold shrink-0 ${badgeStyle}">
+                    ${thaiLetters[idx]}
+                  </span>
+                  <span class="text-sm sm:text-base leading-snug">${choiceText}</span>
+                  ${statusTag}
+                </button>
+              `;
+            })
+            .join('');
+
+          const unansweredNote =
+            isSubmitted && selectedIdx === null
+              ? `<div class="mt-2.5 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium">
+                  ⚠️ คุณไม่ได้เลือกคำตอบในข้อย่อยนี้ (ได้ 0 คะแนน)
+                </div>`
+              : '';
+
+          return `
+            <div class="thai-card rounded-3xl p-4 sm:p-6">
+              <h3 class="font-heading text-base sm:text-lg font-bold text-slate-800 mb-3.5">
+                ${sub.question}
+              </h3>
+              <div class="grid grid-cols-1 gap-2.5">
+                ${choicesHtml}
+              </div>
+              ${unansweredNote}
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    window.selectSubOption = function (subKey, optionIndex) {
+      if (state.isCurrentSubmitted) return;
+      state.currentSelections[subKey] = optionIndex;
+      renderSubQuestions();
+      updateSelectionHelperText();
+    };
+
+    function updateSelectionHelperText() {
+      const answeredCount = ['sub1', 'sub2', 'sub3'].filter((k) => state.currentSelections[k] !== null).length;
+      const helper = document.getElementById('selectionStatusHelper');
+      if (answeredCount === 3) {
+        helper.innerHTML = '<span class="text-emerald-700 font-semibold">✓ เลือกครบทั้ง 3 ข้อย่อยแล้ว พร้อมกดตรวจคำตอบ</span>';
+      } else {
+        helper.textContent = `เลือกแล้ว ${answeredCount} / 3 ข้อย่อย (กดตรวจคำตอบได้ทันที หรือเลือกให้ครบก่อนหมดเวลา)`;
+      }
+    }
+
+    window.toggleHint = function () {
+      state.hintVisible = !state.hintVisible;
+      const hintBox = document.getElementById('hintContentBox');
+      const hintBtn = document.getElementById('toggleHintBtn');
+      if (state.hintVisible) {
+        hintBox.classList.remove('hidden');
+        hintBtn.textContent = '🙈 ซ่อนคำใบ้';
+      } else {
+        hintBox.classList.add('hidden');
+        hintBtn.textContent = '💡 เปิดดูคำใบ้ (ช่วยใบ้ 20%)';
+      }
+    };
+
+    window.handleManualSubmit = function () {
+      if (state.isCurrentSubmitted) return;
+      gradeCurrentQuestion(false);
+    };
+
+    function gradeCurrentQuestion(isTimeout) {
+      if (state.isCurrentSubmitted) return;
+      clearInterval(state.timerInterval);
+
+      // Lock screen scroll position so user doesn't jump back to sub 1
+      const actionPanel = document.getElementById('bottomActionPanel');
+      const panelTopBefore = actionPanel.getBoundingClientRect().top;
+
+      state.isCurrentSubmitted = true;
+
+      const elapsed = Math.min(30, Math.max(1, 30 - state.timeLeft));
+      state.totalTimeTakenSeconds += elapsed;
+
+      let questionEarned = 0;
+      const subResults = state.shuffledSubQuestions.map((sub, idx) => {
+        const chosenIdx = state.currentSelections[sub.key];
+        const chosenText = chosenIdx !== null ? sub.choices[chosenIdx] : null;
+        const isCorrect = chosenText !== null && chosenText === sub.correct;
+        if (isCorrect) questionEarned += 1;
+        return {
+          subNumber: idx + 1,
+          isCorrect,
+          chosenText,
+          correctText: sub.correct
+        };
+      });
+
+      state.totalScore += questionEarned;
+      state.questionHistory.push({
+        questionNumber: state.currentQuestionIndex + 1,
+        title: QUIZ_DATA[state.currentQuestionIndex].title,
+        earned: questionEarned,
+        isTimeout,
+        subResults
+      });
+
+      document.getElementById('quizLiveScore').textContent = state.totalScore;
+
+      renderSubQuestions();
+
+      const timeoutBanner = document.getElementById('timeoutNoticeBanner');
+      if (isTimeout) timeoutBanner.classList.remove('hidden');
+      else timeoutBanner.classList.add('hidden');
+
+      const feedbackBanner = document.getElementById('questionFeedbackBanner');
+      const earnedBadge = document.getElementById('questionEarnedBadge');
+      const feedbackSubtext = document.getElementById('questionFeedbackSubtext');
+      const subScorePills = document.getElementById('subScorePills');
+
+      feedbackBanner.classList.remove('hidden');
+      earnedBadge.textContent = `ได้คะแนนข้อนี้ ${questionEarned} / 3 คะแนน`;
+      feedbackSubtext.textContent =
+        questionEarned === 3
+          ? 'เก่งมาก! ตอบถูกต้องครบทั้ง 3 ข้อย่อย'
+          : `เฉลย: ${QUIZ_DATA[state.currentQuestionIndex].title}`;
+
+      subScorePills.innerHTML = subResults
+        .map((sr) =>
+          sr.isCorrect
+            ? `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300">ข้อ ${sr.subNumber}: ✓</span>`
+            : `<span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 border border-rose-300">ข้อ ${sr.subNumber}: ✕</span>`
+        )
+        .join('');
+
+      document.getElementById('submitAnswerBtn').classList.add('hidden');
+      document.getElementById('selectionStatusHelper').textContent = 'ตรวจคำตอบเรียบร้อยแล้ว กดปุ่มข้อต่อไปเพื่อทำโจทย์ถัดไป';
+
+      const nextBtn = document.getElementById('nextQuestionBtn');
+      nextBtn.classList.remove('hidden');
+      if (state.currentQuestionIndex === QUIZ_DATA.length - 1) {
+        nextBtn.textContent = 'ดูสรุปผลคะแนน 🏆';
+      } else {
+        nextBtn.textContent = 'ข้อต่อไป ➔';
+      }
+
+      // Maintain view focus on the action panel without pulling page up
+      const panelTopAfter = actionPanel.getBoundingClientRect().top;
+      const deltaY = panelTopAfter - panelTopBefore;
+      if (Math.abs(deltaY) > 1) {
+        window.scrollBy({ top: deltaY, behavior: 'instant' });
+      }
+    }
+
+    window.goToNextQuestion = async function () {
+      if (state.currentQuestionIndex < QUIZ_DATA.length - 1) {
+        loadQuestion(state.currentQuestionIndex + 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        await finishQuizAndShowResults();
+      }
+    };
+
+    // =========================================================================
+    // 9. Real-time Results & Leaderboard Tables
+    // =========================================================================
+    async function finishQuizAndShowResults() {
+      clearInterval(state.timerInterval);
+
+      await saveScoreRecord({
+        name: state.playerName,
+        studentNumber: state.playerNumber,
+        score: state.totalScore,
+        timeTakenSeconds: state.totalTimeTakenSeconds
+      });
+
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('resultsScreen').classList.remove('hidden');
+
+      const percent = Math.round((state.totalScore / 30) * 100);
+      document.getElementById('resultPlayerSummary').textContent = `ผู้เข้าสอบ: ${state.playerName} (เลขที่ ${state.playerNumber})`;
+      document.getElementById('finalScoreValue').textContent = state.totalScore;
+      document.getElementById('finalPercentValue').textContent = percent;
+      document.getElementById('finalTimeValue').textContent = `${state.totalTimeTakenSeconds} วินาที`;
+
+      const breakdownList = document.getElementById('questionBreakdownList');
+      breakdownList.innerHTML = state.questionHistory
+        .map(
+          (item) => `
+          <div class="p-3 rounded-2xl bg-[#FAF6F0] border border-[#E5D5B7] flex items-center justify-between gap-2 text-xs sm:text-sm">
+            <div>
+              <span class="font-heading font-bold text-amber-900">ข้อ ${item.questionNumber}.</span>
+              <span class="font-medium text-slate-800">${item.title}</span>
+              ${item.isTimeout ? '<span class="ml-1 text-[11px] text-amber-700">(หมดเวลา)</span>' : ''}
+            </div>
+            <span class="font-heading font-bold px-2.5 py-1 rounded-xl shrink-0 ${
+              item.earned === 3
+                ? 'bg-emerald-100 text-emerald-800'
+                : item.earned > 0
+                ? 'bg-amber-100 text-amber-900'
+                : 'bg-rose-100 text-rose-800'
+            }">
+              ${item.earned}/3
+            </span>
+          </div>
+        `
+        )
+        .join('');
+
+      switchResultTableTab('leaderboard');
+      renderScoreTables();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.toggleBreakdownPanel = function () {
+      const panel = document.getElementById('questionBreakdownPanel');
+      const btn = document.getElementById('toggleBreakdownBtn');
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        btn.textContent = '🔼 ซ่อนรายละเอียดคะแนนรายข้อ';
+      } else {
+        panel.classList.add('hidden');
+        btn.textContent = '📊 ดูสรุปคะแนนรายข้อ (10 ข้อ)';
+      }
+    };
+
+    window.returnToHome = function () {
+      clearInterval(state.timerInterval);
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('resultsScreen').classList.add('hidden');
+      document.getElementById('homeScreen').classList.remove('hidden');
+      switchHomeTab('register');
+      checkDuplicateNameLive();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function formatThaiTimestamp(ts) {
+      if (!ts) return '-';
+      try {
+        const d = new Date(ts);
+        return d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+      } catch {
+        return '-';
+      }
+    }
+
+    function buildLeaderboardHtml(records) {
+      if (!records.length) {
+        return `
+          <div class="text-center py-10 px-4 rounded-2xl bg-[#FAF6F0] border border-dashed border-[#E5D5B7] text-slate-500 text-sm">
+            ยังไม่มีผู้บันทึกคะแนนในระบบ เป็นคนแรกที่ทำแบบทดสอบเลย!
+          </div>
+        `;
+      }
+
+      const sorted = [...records].sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (a.timeTakenSeconds !== b.timeTakenSeconds) return a.timeTakenSeconds - b.timeTakenSeconds;
+        return b.updatedAt - a.updatedAt;
+      });
+
+      const currentNorm = state.normalizedPlayerName;
+
+      const rows = sorted
+        .map((item, idx) => {
+          const rank = idx + 1;
+          const isMe = currentNorm && item.normalizedName === currentNorm;
+          let rankBadge = `<span class="font-heading font-bold text-slate-600">${rank}</span>`;
+          if (rank === 1) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-400 text-amber-950 font-heading font-bold text-xs shadow-sm">🥇</span>`;
+          else if (rank === 2) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-200 text-slate-800 font-heading font-bold text-xs shadow-sm">🥈</span>`;
+          else if (rank === 3) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-orange-200 text-orange-900 font-heading font-bold text-xs shadow-sm">🥉</span>`;
+
+          return `
+            <tr class="border-b border-slate-100 transition-colors ${
+              isMe ? 'bg-amber-50/90 font-semibold' : 'hover:bg-slate-50/80'
+            }">
+              <td class="py-3 px-3 text-center">${rankBadge}</td>
+              <td class="py-3 px-3 text-center font-heading font-semibold text-slate-700">${item.studentNumber}</td>
+              <td class="py-3 px-3 text-slate-900">
+                ${item.name}
+                ${isMe ? '<span class="ml-1.5 text-[11px] px-2 py-0.5 rounded-full bg-amber-600 text-white font-heading">คุณ</span>' : ''}
+              </td>
+              <td class="py-3 px-3 text-center">
+                <span class="font-heading font-bold px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  ${item.score} / 30
+                </span>
+              </td>
+              <td class="py-3 px-3 text-center text-xs text-slate-500">${formatThaiTimestamp(item.updatedAt)}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      return `
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-[#FAF6F0] border-y border-[#E5D5B7] font-heading text-xs sm:text-sm text-amber-950">
+              <th class="py-3 px-3 text-center w-16">อันดับ</th>
+              <th class="py-3 px-3 text-center w-20">เลขที่</th>
+              <th class="py-3 px-3">ชื่อผู้เข้าทดสอบ</th>
+              <th class="py-3 px-3 text-center w-28">คะแนน</th>
+              <th class="py-3 px-3 text-center w-24">เวลาบันทึก</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function buildNumberSortedHtml(records, searchQuery) {
+      if (!records.length) {
+        return `
+          <div class="text-center py-10 px-4 rounded-2xl bg-[#FAF6F0] border border-dashed border-[#E5D5B7] text-slate-500 text-sm">
+            ยังไม่มีข้อมูลคะแนนในระบบ
+          </div>
+        `;
+      }
+
+      const q = String(searchQuery || '').trim().toLowerCase();
+
+      const sorted = [...records]
+        .sort((a, b) => {
+          if (a.studentNumber !== b.studentNumber) return a.studentNumber - b.studentNumber;
+          return a.name.localeCompare(b.name, 'th');
+        })
+        .filter((item) => {
+          if (!q) return true;
+          return (
+            String(item.studentNumber).includes(q) ||
+            item.name.toLowerCase().includes(q)
+          );
+        });
+
+      if (!sorted.length) {
+        return `
+          <div class="text-center py-8 px-4 rounded-2xl bg-[#FAF6F0] border border-[#E5D5B7] text-slate-500 text-sm">
+            ไม่พบข้อมูลที่ตรงกับคำค้นหา "${searchQuery}"
+          </div>
+        `;
+      }
+
+      const currentNorm = state.normalizedPlayerName;
+
+      const rows = sorted
+        .map((item) => {
+          const isMe = currentNorm && item.normalizedName === currentNorm;
+          return `
+            <tr class="border-b border-slate-100 transition-colors ${
+              isMe ? 'bg-amber-50/90 font-semibold' : 'hover:bg-slate-50/80'
+            }">
+              <td class="py-3 px-3 text-center">
+                <span class="inline-flex items-center justify-center min-w-[2.25rem] px-2 py-0.5 rounded-lg bg-amber-100 text-amber-950 font-heading font-bold text-sm">
+                  ${item.studentNumber}
+                </span>
+              </td>
+              <td class="py-3 px-3 text-slate-900">
+                ${item.name}
+                ${isMe ? '<span class="ml-1.5 text-[11px] px-2 py-0.5 rounded-full bg-amber-600 text-white font-heading">คุณ</span>' : ''}
+              </td>
+              <td class="py-3 px-3 text-center">
+                <span class="font-heading font-bold px-2.5 py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-200">
+                  ${item.score} / 30
+                </span>
+              </td>
+              <td class="py-3 px-3 text-center text-xs text-slate-500">${formatThaiTimestamp(item.updatedAt)}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      return `
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-[#FAF6F0] border-y border-[#E5D5B7] font-heading text-xs sm:text-sm text-amber-950">
+              <th class="py-3 px-3 text-center w-24">เลขที่</th>
+              <th class="py-3 px-3">ชื่อผู้เข้าทดสอบ</th>
+              <th class="py-3 px-3 text-center w-28">คะแนนล่าสุด</th>
+              <th class="py-3 px-3 text-center w-24">เวลาบันทึก</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    window.renderScoreTables = function () {
+      const countEl = document.getElementById('homeLeaderboardCount');
+      if (countEl) countEl.textContent = state.scoresList.length;
+
+      const lbHtml = buildLeaderboardHtml(state.scoresList);
+      const homeLb = document.getElementById('homeLeaderboardTableWrap');
+      const resLb = document.getElementById('resultLeaderboardWrap');
+      if (homeLb) homeLb.innerHTML = lbHtml;
+      if (resLb) resLb.innerHTML = lbHtml;
+
+      const homeQuery = document.getElementById('homeNumberSearchInput')?.value || '';
+      const resQuery = document.getElementById('resultNumberSearchInput')?.value || '';
+
+      const homeNumWrap = document.getElementById('homeNumberListTableWrap');
+      const resNumWrap = document.getElementById('resultNumberListWrap');
+      if (homeNumWrap) homeNumWrap.innerHTML = buildNumberSortedHtml(state.scoresList, homeQuery);
+      if (resNumWrap) resNumWrap.innerHTML = buildNumberSortedHtml(state.scoresList, resQuery);
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initDatabase();
+      renderScoreTables();
+      preloadCulturePhoto(0);
+    });
+  </script>
+</body>
+</html>
