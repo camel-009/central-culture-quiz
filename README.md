@@ -1,0 +1,2 @@
+# central-culture-quiz
+วัฒนธรรมไทย
